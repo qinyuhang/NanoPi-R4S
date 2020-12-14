@@ -189,6 +189,7 @@ jobs:
           mkdir -p ./artifact/firmware
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
+          mkdir -p ./xz_artifactory
           
           rm -rf $(find code/friendlywrt/bin/targets/ -type d -name "packages")
           cp -rf $(find code/friendlywrt/bin/targets/ -type f) ./artifact/firmware/
@@ -199,6 +200,9 @@ jobs:
           #find code/friendlywrt/bin/targets/rockchip-rk3399/generic -name "openwrt*-squashfs.img" | xargs -I{} sh -c 'f=$(basename $1); zip -r -j "./artifact/${f}.zip" $1' sh {} \;
           
           cp code/friendlywrt/.config ./artifact/
+          tar -czvf ./artifact.tar ./artifact
+          xz -T10 ./artifact.tar
+          mv artifact.tar xz_artifactory/
           
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
@@ -217,6 +221,12 @@ jobs:
         with:
           name: OpenWrt_firmware
           path: ./bin/targets/
+
+      - name: Deliver xz
+        uses: actions/upload-artifact@v2
+        with:
+          name: OpenWrt_firmware_xz
+          path: ./xz_artifactory
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
