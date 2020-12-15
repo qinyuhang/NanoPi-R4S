@@ -179,9 +179,19 @@ jobs:
           #find code/friendlywrt/bin/targets/rockchip-rk3399/generic -name "openwrt*-squashfs.img" | xargs -I{} sh -c 'f=$(basename $1); zip -r -j "./artifact/${f}.zip" $1' sh {} \;
           
           cp code/friendlywrt/.config ./artifact/
+          tar -cvf artifact.tar ./artifact
+          xz -T10 artifact.tar
+          mkdir -p xz_artifact
+          mv artifact.tar.xz xz_artifact
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
         with:
           name: NanoPi-R4S FriendlyWrt v1
           path: ./artifact/
+
+      - name: Upload Artifact.xz
+        uses: actions/upload-artifact@main
+        with:
+          name: NanoPi-R4S FriendlyWrt v1 xz
+          path: ./xz_artifact/
