@@ -202,7 +202,7 @@ jobs:
           cp code/friendlywrt/.config ./artifact/
           tar -czvf ./artifact.tar ./artifact
           xz -T10 ./artifact.tar
-          mv artifact.tar xz_artifactory/
+          mv artifact.tar.xz xz_artifactory/
           
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
